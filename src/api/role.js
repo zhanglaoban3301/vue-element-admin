@@ -2,21 +2,21 @@ import request from '@/utils/request'
 
 export function getRoutes() {
   return request({
-    url: '/vue-element-admin/routes',
+    url: '/admin/acl/routes',
     method: 'get'
   })
 }
 
 export function getRoles() {
   return request({
-    url: '/vue-element-admin/roles',
+    url: '/admin/acl/roles',
     method: 'get'
   })
 }
 
 export function addRole(data) {
   return request({
-    url: '/vue-element-admin/role',
+    url: '/admin/acl/role',
     method: 'post',
     data
   })
@@ -24,7 +24,7 @@ export function addRole(data) {
 
 export function updateRole(id, data) {
   return request({
-    url: `/vue-element-admin/role/${id}`,
+    url: `/admin/acl/updateRole/${id}`,
     method: 'put',
     data
   })
@@ -32,7 +32,14 @@ export function updateRole(id, data) {
 
 export function deleteRole(id) {
   return request({
-    url: `/vue-element-admin/role/${id}`,
+    url: `/admin/acl/deleteRole/${id}`,
     method: 'delete'
+  })
+}
+export function deleteRoles(ids) {
+  return request({
+    url: `/admin/acl/deleteRoles`,
+    method: 'delete',
+    data: ids
   })
 }

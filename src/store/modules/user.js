@@ -12,6 +12,7 @@ const state = {
 
 const mutations = {
   SET_TOKEN: (state, token) => {
+    console.log('存入token', token)
     state.token = token
   },
   SET_INTRODUCTION: (state, introduction) => {
@@ -32,9 +33,11 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
+
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
+        console.log('要存入的token', data.token)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -47,9 +50,13 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      let token = state.token
+      if (!token) {
+        token = getToken() // 重新从浏览器的 Cookie 中获取 token
+      }
+      // console.log("token",state.token)
+      getInfo().then(response => {
         const { data } = response
-
         if (!data) {
           reject('Verification failed, please Login again.')
         }

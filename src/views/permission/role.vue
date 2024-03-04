@@ -3,22 +3,22 @@
     <el-button type="primary" @click="handleAddRole">New Role</el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="Role Key" width="220">
+      <el-table-column align="center" label="序号" width="220">
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Role Name" width="220">
+      <el-table-column align="center" label="角色名" width="220">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.roleName }}
         </template>
       </el-table-column>
-      <el-table-column align="header-center" label="Description">
+      <el-table-column align="header-center" label="描述">
         <template slot-scope="scope">
-          {{ scope.row.description }}
+          {{ scope.row.renark }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Operations">
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope)">Edit</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope)">Delete</el-button>
@@ -117,13 +117,13 @@ export default {
 
         const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
 
-        if (route.children && onlyOneShowingChild && !route.alwaysShow) {
+        if (route.children && onlyOneShowingChild) {
           route = onlyOneShowingChild
         }
 
         const data = {
           path: path.resolve(basePath, route.path),
-          title: route.meta && route.meta.title
+          title: route.name
 
         }
 
