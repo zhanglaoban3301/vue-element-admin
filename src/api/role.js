@@ -24,8 +24,8 @@ export function addRole(data) {
 
 export function updateRole(id, data) {
   return request({
-    url: `/admin/acl/updateRole/${id}`,
-    method: 'put',
+    url: `/admin/acl/updateRole`,
+    method: 'post',
     data
   })
 }
