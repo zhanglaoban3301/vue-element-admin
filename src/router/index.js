@@ -132,11 +132,11 @@ export const asyncRoutes = [
   {
     path: '/permission',
     component: Layout,
-    redirect: '/permission/page',
+    // redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
     name: 'permission',
     meta: {
-      title: '用户管理',
+      title: '权限管理',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
@@ -155,7 +155,7 @@ export const asyncRoutes = [
         component: () => import('@/views/permission/directive'),
         name: 'DirectivePermission',
         meta: {
-          title: 'Directive Permission'
+          title: '用户管理'
           // if do not set roles, means: this page does not require permission
         }
       },
@@ -171,15 +171,39 @@ export const asyncRoutes = [
     ]
   },
 
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/icons/index'),
+  //       name: 'Icons',
+  //       meta: { title: 'Icons', icon: 'icon', noCache: true }
+  //     }
+  //   ]
+  // },
+
   {
-    path: '/icon',
+    path: '/sys',
     component: Layout,
+    redirect: '/sys',
+    name: 'sys',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '系统管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'Icons', icon: 'icon', noCache: true }
+        path: 'region',
+        component: () => import('@/views/region/region'),
+        name: 'region',
+        meta: {
+          title: '开通区域',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
       }
     ]
   },
