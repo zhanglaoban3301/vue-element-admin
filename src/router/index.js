@@ -133,7 +133,6 @@ export const asyncRoutes = [
     path: '/permission',
     component: Layout,
     // redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
     name: 'permission',
     meta: {
       title: '权限管理',
@@ -197,7 +196,7 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'region',
+        path: '/region',
         component: () => import('@/views/region/region'),
         name: 'region',
         meta: {
@@ -207,7 +206,58 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/pro',
+    component: Layout,
+    redirect: '/pro',
+    name: 'pro',
+    // alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '商品管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'cata',
+        component: () => import('@/views/pro/cata'),
+        name: 'cata',
+        meta: {
+          title: '商品分类',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'attr',
+        component: () => import('@/views/pro/attr'),
+        name: 'attr',
 
+        meta: {
+          title: '平台属性分组',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'childAttr',
+        component: () => import('@/views/pro/childAttr'),
+        name: 'childAttr',
+        hidden: true,
+        meta: {
+          title: '平台属性列表',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'sku',
+        component: () => import('@/views/pro/sku'),
+        name: 'sku',
+        meta: {
+          title: 'SKU列表',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
   chartsRouter,

@@ -31,6 +31,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-dialog :visible.sync="dialogVisible" title="新增菜单">
       <el-form :model="menu" label-width="80px" label-position="left">
         <el-form-item label="菜单名称">

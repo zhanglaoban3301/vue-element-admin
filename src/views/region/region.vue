@@ -26,24 +26,34 @@
       </el-table-column>
       <el-table-column align="header-center" label="状态">
         <template slot-scope="scope">
-          {{ scope.row.status }}
+          {{ scope.row.status == '0'?'未开通':'已开通' }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
-          <el-button type="primary" size="small" @click="handleEdit(scope)">取消开通</el-button>
+          <el-button type="primary" size="small" @click="handleEdit(scope)">{{ scope.row.status == '0'?'开通':'取消开通' }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-
+    <el-pagination
+      style="margin-top: 25px;"
+      background
+      layout="prev, pager, next"
+      :current-change="changePage"
+      :current-page="pageNo"
+      :total="total"
+    />
     <el-dialog :visible.sync="dialogVisible" title="开通区域">
       <el-form :model="region" label-width="80px" label-position="left">
         <el-form-item label="选择区域">
           <el-tree
+            ref="tree"
             :data="treeData"
             :props="props"
             :load="loadNode"
+            :check-strictly="strictly"
+            node-key="id"
             lazy
             show-checkbox
           />
@@ -62,55 +72,85 @@
 </template>
 <script>
 
-import { getRegionByParentId, getRegion } from '@/api/region'
+import { getRegionByParentId, getRegion, getRegionCount } from '@/api/region'
 
 export default {
   data() {
     return {
       treeData: [],
+      loadData: [],
       regionList: [],
+      total: 0,
+      pageNo: 1,
+      pageSize: 10,
+      dialogVisible: false,
+      strictly: true,
       props: {
         label: 'name',
-        children: 'zones',
-        isLeaf: 'leaf'
+        children: [],
+        id: 'id',
+        name: 'name'
       },
       region: {
-
+        wareName: ''
       }
     }
   },
 
   created() {
+    this.getCount()
     this.getRegionList()
+    this.getFirstTree()
   },
   methods: {
-    loadNode(node, resolve) {
+
+    handleAddRegion() {
+      this.dialogVisible = true
+    },
+    changePage(page) {
+      console.log(page)
+    },
+    async loadNode(node, resolve) {
       if (node.level === 0) {
         return resolve(this.treeData)
       }
-      if (node.level > 1) {
-        console.log('node', node)
-        const res = this.reloadRegion(node.id)
-        return resolve(res)
+      if (node.level >= 1) {
+        const res = await getRegionByParentId(node.data.id)
+        return resolve(res.data)
       }
     },
+    async getCount() {
+      const res = await getRegionCount()
+      this.total = res.data
+    },
     async getRegionList() {
-      await getRegion()
+      const res = await getRegion(this.pageNo, this.pageSize)
+      this.regionList = res.data
     },
-    loadRegion(node) {
-      this.treeData = getRegion(node)
-    },
-    reloadRegion(node) {
-      return getRegion(node)
-    },
-    async getRegion(node) {
+
+    async getTree(node) {
       const res = await getRegionByParentId(node)
       return res.data
     },
-    handleAddUser() {
+    async getFirstTree() {
+      const res = await getRegionByParentId(86)
+      this.treeData = res.data
+    },
 
+    confirm() {
+      const checkedKeys = this.$refs.tree.getCheckedKeys()
+      console.log('checkedKeys', checkedKeys)
+      if (checkedKeys.length > 1 || checkedKeys.length === 0) {
+        alert('选择一个')
+      }
+      console.log(this.region.wareName)
+      console.log(checkedKeys[0])
+      this.dialogVisible = false
     },
     handleEdit(scope) {
+
+    },
+    handleDelete() {
 
     }
 
