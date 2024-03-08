@@ -36,7 +36,9 @@
       </el-table-column>
       <el-table-column align="header-center" label="设置">
         <template slot-scope="scope">
-          <el-button type="primary" @click="open(scope)">平台属性列表</el-button>
+          <router-link :to="{ name: 'childAttr', params: { id: scope.row.id }}">
+            <el-button size="mini" icon="el-icon-edit">平台属性列表</el-button>
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">

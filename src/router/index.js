@@ -235,7 +235,8 @@ export const asyncRoutes = [
         meta: {
           title: '平台属性分组',
           roles: ['admin'] // or you can only set roles in sub nav
-        }
+        },
+       
       },
       {
         path: 'childAttr',

@@ -83,9 +83,11 @@ export function attrSelectAll(pageNo, pageSize, attr) {
     url: `/pro/attr/selectAll`,
     method: 'post',
     data: {
-      current: pageNo,
-      size: pageSize,
-      attr: attr
+      page:{
+        current: pageNo,
+        size: pageSize,
+      },
+      data:attr
     }
   })
 }
@@ -97,7 +99,13 @@ export function attrAdd(data) {
     data
   })
 }
-
+export function getAttrByAttrGroupId(value) {
+  return request({
+    url: `/pro/attr/getByAttrGroupId?id=${value}`,
+    method: 'get',
+  
+  })
+}
 export function attrUpdate(data) {
   return request({
     url: `/pro/attr/update`,
@@ -109,6 +117,44 @@ export function attrUpdate(data) {
 export function attrDelete(data) {
   return request({
     url: `/pro/attr/delete`,
+    method: 'delete',
+    data
+  })
+}
+
+export function skuSelectAll(pageNo, pageSize, sku) {
+  return request({
+    url: `/pro/skuInfo/selectAll`,
+    method: 'post',
+    data: {
+      page:{
+        current: pageNo,
+        size: pageSize,
+      },
+      data:sku
+    }
+  })
+}
+
+export function skuAdd(data) {
+  return request({
+    url: `/pro/skuInfo/insert`,
+    method: 'post',
+    data
+  })
+}
+
+export function skuUpdate(data) {
+  return request({
+    url: `/pro/skuInfo/update`,
+    method: 'put',
+    data
+  })
+}
+
+export function skuDelete(data) {
+  return request({
+    url: `/pro/skuInfo/delete`,
     method: 'delete',
     data
   })

@@ -16,7 +16,7 @@
 
       <el-table-column align="header-center" label="属性录入方式">
         <template slot-scope="scope">
-          {{ scope.row.inputType }}
+          {{ scope.row.inputType == 0?'手工录入':'从列表中选择' }}
         </template>
       </el-table-column>
       <el-table-column align="header-center" label="可选值列表">
@@ -52,14 +52,18 @@
     />
     <el-dialog :visible.sync="dialogVisible" :title="title">
       <el-form :model="attr" label-width="80px" label-position="left">
-        <el-form-item label="组名">
-          <el-input v-model="attr.name" placeholder="组名" />
+        <el-form-item label="属性名">
+          <el-input v-model="attr.name" placeholder="属性名" />
         </el-form-item>
-        <el-form-item label="排序">
-          <el-input v-model="attr.sort" placeholder="排序" />
+      
+        <el-form-item label="属性录入方式">
+          <el-radio-group v-model="attr.inputType">
+          <el-radio  :label="0">手工录入</el-radio>
+          <el-radio  :label="1">从列表中选择</el-radio>
+        </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="attr.remark" placeholder="备注" />
+        <el-form-item  v-show="attr.inputType=='1'" label="可选值列表">
+          <el-input v-model="attr.selectList" placeholder="可选值列表" />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -75,7 +79,7 @@
 import { attrDelete, attrUpdate, attrAdd, attrSelectAll } from '@/api/product'
 
 export default {
-  name: 'Attr',
+
   data() {
     return {
       title: '',
@@ -85,9 +89,11 @@ export default {
       pageSize: 10,
       dialogVisible: false,
       attr: {
-        name: '',
-        sort: '',
-        remark: ''
+        id:null,
+        name: null,
+        inputType:null,
+        attrGroupId:null,
+        selectList:null,
       }
     }
   },
@@ -98,7 +104,8 @@ export default {
   },
 
   created() {
-    console.log(this.$route.query)
+    const attrGroupId  = this.$route.params.id;
+    this.attr.attrGroupId = attrGroupId
     this.getList()
   },
   methods: {
@@ -138,9 +145,8 @@ export default {
     handleEdit(scope) {
       this.title = '修改属性'
       this.dialogVisible = true
-      this.attr.id = scope.row.id
-      this.attr.name = scope.row.name
-      this.attr.sort = scope.row.sort
+      console.log("row",scope.row)
+      this.attr = scope.row
     },
     refreshTable() {
       this.getList(this.pageNo)
@@ -153,7 +159,7 @@ export default {
       })
         .then(async() => {
           attrDelete([scope.row.id])
-          this.rolesList.splice($index, 1)
+          this.refreshTable()
           this.$message({
             type: 'success',
             message: '已删除'
